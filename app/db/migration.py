@@ -1,9 +1,6 @@
 import sqlite3
 
-from sqlalchemy.orm import sessionmaker
-
-from app.db.database import engine
-from app.models.models import User, Account, Transaction
+from app.db.database import db
 
 
 def migrate_db():
@@ -21,31 +18,34 @@ def migrate_db():
     sqlite_cursor.execute("SELECT * FROM transactions")
     transactions_data = sqlite_cursor.fetchall()
 
-    # Set up a session for PostgreSQL
-    postgre_sql_session = sessionmaker(bind=engine)
-    db_session = postgre_sql_session()
-
     # Migrate Users
+    users_collection = db['users']
     for user in users_data:
-        # Assuming User model has attributes id, username, hashed_password, and is_admin
-        new_user = User(id=user[0], username=user[1], hashed_password=user[2], is_admin=user[3])
-        db_session.add(new_user)
+        users_collection.insert_one({
+            "_id": user[0],
+            "username": user[1],
+            "hashed_password": user[2],
+            "is_admin": user[3]
+        })
 
     # Migrate Accounts
+    accounts_collection = db['accounts']
     for account in accounts_data:
-        # Assuming Account model has attributes id, user_id, balance
-        new_account = Account(id=account[0], user_id=account[1], balance=account[2])
-        db_session.add(new_account)
+        accounts_collection.insert_one({
+            "_id": account[0],
+            "user_id": account[1],
+            "balance": account[2]
+        })
 
     # Migrate Transactions
+    transactions_collection = db['transactions']
     for transaction in transactions_data:
-        # Assuming Transaction model has attributes id, account_id, amount
-        new_transaction = Transaction(id=transaction[0], account_id=transaction[1], amount=transaction[2])
-        db_session.add(new_transaction)
-
-    db_session.commit()
+        transactions_collection.insert_one({
+            "_id": transaction[0],
+            "account_id": transaction[1],
+            "amount": transaction[2]
+        })
 
     # Close sessions and connections to clean up
-    db_session.close()
     sqlite_cursor.close()
     sqlite_connection.close()

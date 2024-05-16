@@ -1,61 +1,45 @@
-import psycopg
-from psycopg import rows
-
-from app.db.database import conn_pool
+from app.db.database import db
 
 
 def get_users(skip: int = 0, limit: int = 10):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("SELECT * FROM users OFFSET %s LIMIT %s", (skip, limit))
-            users = cur.fetchall()
+    users = list(db.users.find().skip(skip).limit(limit))
     return users
 
 
 def get_user(user_id: int):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-            user = cur.fetchone()
+    user = db.users.find_one({"_id": user_id})
     return user
 
 
 def get_user_by_username(username: str):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("SELECT * FROM users WHERE username = %s", (username,))
-            user = cur.fetchone()
+    user = db.users.find_one({"username": username})
     return user
 
 
 def create_user(user_data):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("INSERT INTO users (username, hashed_password, is_admin) VALUES (%s, %s, %s) RETURNING *",
-                        (user_data.username, user_data.password, user_data.is_admin))
-            user = cur.fetchone()
-        conn.commit()
+    result = db.users.insert_one({
+        "username": user_data.username,
+        "hashed_password": user_data.password,
+        "is_admin": user_data.is_admin
+    })
+    user = db.users.find_one({"_id": result.inserted_id})
     return user
 
 
 def update_user(user_id: int, user_data):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("""
-                UPDATE users
-                SET username = %s, hashed_password = %s, is_admin = %s
-                WHERE id = %s
-                RETURNING *
-            """, (user_data.username, user_data.password, user_data.is_admin, user_id))
-            updated_user = cur.fetchone()
-        conn.commit()
+    result = db.users.update_one(
+        {"_id": user_id},
+        {"$set": {
+            "username": user_data.username,
+            "hashed_password": user_data.password,
+            "is_admin": user_data.is_admin
+        }},
+        return_document=True
+    )
+    updated_user = db.users.find_one({"_id": user_id})
     return updated_user
 
 
 def delete_user(user_id: int):
-    with conn_pool.connection() as conn:
-        with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
-            cur.execute("DELETE FROM users WHERE id = %s RETURNING *", (user_id,))
-            user = cur.fetchone()
-        conn.commit()
+    user = db.users.find_one_and_delete({"_id": user_id})
     return user
