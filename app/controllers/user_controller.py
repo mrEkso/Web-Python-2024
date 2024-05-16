@@ -1,6 +1,6 @@
+from bson import ObjectId
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
-from bson import ObjectId
 
 from app.schemas import schemas
 from app.services import user_service
