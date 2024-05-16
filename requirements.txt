@@ -1,0 +1,8 @@
+pydantic~=2.7.1
+SQLAlchemy~=2.0.30
+fastapi~=0.111.0
+fluent~=0.10.0
+prometheus-fastapi-instrumentator
+fluent-logger
+uvicorn
+python-dotenv~=1.0.1
