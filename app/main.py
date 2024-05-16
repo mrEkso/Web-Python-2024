@@ -7,7 +7,8 @@ from fluent import handler as fluent_handler
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.controllers import user_controller
-from app.db.database import init_db, init_data
+from app.db.database import init_db
+from app.db.migration import migrate_db
 
 app = FastAPI(title="Financial Exchange API", version="1.0.0", description="API for managing financial transactions")
 templates = Jinja2Templates(directory="templates")
@@ -41,8 +42,7 @@ logger.setLevel(logging.INFO)
 # Include the user router
 app.include_router(user_controller.router, prefix="/users", tags=["users"])
 
-
-@app.on_event("startup")
-def on_startup():
-    init_db()
-    # init_data()
+# @app.on_event("startup")
+# def on_startup():
+#     init_db()
+#     migrate_db()

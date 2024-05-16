@@ -1,48 +1,45 @@
 import os
 
 from dotenv import load_dotenv
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from psycopg_pool import ConnectionPool
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from app.models.models import User, Account, Transaction, Base
+from app.models.models import Base
 
 # Load environment variables from .env file
 load_dotenv()
 
 DATABASE_URL = os.getenv('DATABASE_URL')
+
+# Create a connection pool
+conn_pool = ConnectionPool(DATABASE_URL)
+
 engine = create_engine(DATABASE_URL, echo=True)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+def create_database():
+    connection_params = {
+        "dbname": "postgres",
+        "user": "postgres",
+        "password": "root",
+        "host": "localhost"
+    }
+
+    import psycopg2
+    conn = psycopg2.connect(**connection_params)
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+
+    cursor = conn.cursor()
+    try:
+        cursor.execute("CREATE DATABASE financial_exchange")
+    except psycopg2.errors.DuplicateDatabase:
+        print("Database already exists")
+    cursor.close()
+    conn.close()
 
 
 def init_db():
     """Create database tables."""
+    create_database()
     Base.metadata.create_all(bind=engine)
-
-
-def init_data():
-    """Populate the database with initial data."""
-    session = SessionLocal()
-    # Creating sample users
-    user1 = User(username='john_doe', hashed_password='hashedpassword123', is_admin=False)
-    user2 = User(username='admin_user', hashed_password='secureadminpass', is_admin=True)
-    session.add_all([user1, user2])
-
-    # Commit to save the new users
-    session.commit()
-
-    # Creating accounts linked to the users
-    account1 = Account(user_id=user1.id, balance=1000.0)
-    account2 = Account(user_id=user2.id, balance=5000.0)
-    session.add_all([account1, account2])
-
-    # Commit accounts
-    session.commit()
-
-    # Creating transactions
-    transaction1 = Transaction(account_id=account1.id, amount=150.0)
-    transaction2 = Transaction(account_id=account2.id, amount=-200.0)
-    session.add_all([transaction1, transaction2])
-
-    # Final commit
-    session.commit()
-    session.close()

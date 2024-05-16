@@ -24,7 +24,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     username: str | None = Field(None, description="New username for the user")
-    password: str | None = Field(None, description="New password for the user")
+    password: str
     is_admin: bool = False
 
 
