@@ -36,17 +36,17 @@ def get_user(user_id: ObjectId):
     return user
 
 
-def get_user_by_username(username: str):
+def get_user_by_email(email: str):
     """
-    Retrieve a user from the database by their username.
+    Retrieve a user from the database by their email.
 
     Args:
-        username (str): The username of the user to retrieve.
+        email (str): The email of the user to retrieve.
 
     Returns:
         dict: The user record, or None if no user was found.
     """
-    user = db.users.find_one({"username": username})
+    user = db.users.find_one({"email": email})
     return user
 
 
@@ -61,7 +61,7 @@ def create_user(user_data):
         dict: The newly created user record.
     """
     result = db.users.insert_one({
-        "username": user_data.username,
+        "email": user_data.email,
         "hashed_password": pwd_context.hash(user_data.password),  # hash the password
         "is_admin": user_data.is_admin
     })
@@ -82,7 +82,7 @@ def update_user(user_id: ObjectId, user_data):
     """
 
     update_data = {
-        "username": user_data.username,
+        "email": user_data.email,
         "is_admin": user_data.is_admin
     }
     if user_data.password:

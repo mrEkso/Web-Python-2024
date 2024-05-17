@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 
 
 class AccountCreate(BaseModel):
@@ -14,7 +14,7 @@ class Account(BaseModel):
 
 
 class UserBase(BaseModel):
-    username: str
+    email: EmailStr  # EmailStr is a Pydantic email validation type
 
 
 class UserCreate(UserBase):
@@ -23,7 +23,7 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(BaseModel):
-    username: str | None = Field(None, description="New username for the user")
+    email: EmailStr | None = Field(None, description="New email for the user")
     password: str
     is_admin: bool = False
 

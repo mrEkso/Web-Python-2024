@@ -30,7 +30,7 @@ def migrate_db():
     users_collection = db['users']
     for user in users_data:
         new_user = {
-            "username": user[1],
+            "email": user[1],
             "hashed_password": pwd_context.hash(user[2]),  # hash the password
             "is_admin": user[3]
         }

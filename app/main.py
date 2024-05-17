@@ -42,6 +42,6 @@ logger.setLevel(logging.INFO)
 app.include_router(user_controller.router, prefix="/users", tags=["users"])
 
 
-@app.on_event("startup")
-def on_startup():
-    migrate_db()
+# @app.on_event("startup")
+# def on_startup():
+#     migrate_db()
