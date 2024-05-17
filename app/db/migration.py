@@ -1,6 +1,11 @@
 import sqlite3
 
+from passlib.context import CryptContext
+
 from app.db.database import db
+
+# CryptContext instance for password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def migrate_db():
@@ -20,13 +25,13 @@ def migrate_db():
 
     user_ids_map = {}
     account_ids_map = {}
-    
+
     # Migrate Users
     users_collection = db['users']
     for user in users_data:
         new_user = {
             "username": user[1],
-            "hashed_password": user[2],
+            "hashed_password": pwd_context.hash(user[2]),  # hash the password
             "is_admin": user[3]
         }
         result = users_collection.insert_one(new_user)
