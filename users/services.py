@@ -3,11 +3,14 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from dotenv import load_dotenv
 from passlib.context import CryptContext
 
-from .db import users
 from .exceptions import UserNotFound, EmailAlreadyExists
 from .models import User
+from .db import users
+
+load_dotenv()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,7 +23,6 @@ class UserService:
     @staticmethod
     def get_user(user_id):
         user = next((user for user in users if user.id == user_id), None)
-        print(user.password)
         if not user:
             raise UserNotFound(f"User with ID {user_id} not found.")
         return user
@@ -61,7 +63,7 @@ class MailService:
     def send_email(recipient_email):
         # Create the message
         message = MIMEMultipart()
-        message['From'] = os.getenv('MAIL_FROM_NAME') + " <" + os.getenv('MAIL_FROM') + ">"
+        message['From'] = f"{os.getenv('APP_NAME')} <{os.getenv('MAIL_USERNAME')}>"
         message['To'] = recipient_email
         message['Subject'] = 'Підтвердження створення акаунту'
 
@@ -69,7 +71,11 @@ class MailService:
         message.attach(MIMEText(body, 'html'))
 
         # Connect to the SMTP server and send the email
-        with smtplib.SMTP(os.getenv('MAIL_SERVER'), int(os.getenv('MAIL_PORT'))) as server:
-            server.starttls()
-            server.login(os.getenv('MAIL_USERNAME'), os.getenv('MAIL_PASSWORD'))
-            server.send_message(message)
+        try:
+            with smtplib.SMTP(os.getenv('MAIL_SERVER'), int(os.getenv('MAIL_PORT'))) as server:
+                server.starttls()
+                server.login(os.getenv('MAIL_USERNAME'), os.getenv('MAIL_PASSWORD'))
+                server.send_message(message)
+                print(f"Email sent to {recipient_email}")
+        except Exception as e:
+            print(f"Failed to send email to {recipient_email}: {e}")

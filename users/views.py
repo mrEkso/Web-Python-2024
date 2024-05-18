@@ -24,7 +24,7 @@ def user_create(request):
         try:
             new_user = UserService.create_user(request.POST)
             # Send email in a separate thread
-            Thread(target=MailService.send_email, args=new_user.email).start()
+            Thread(target=MailService.send_email, args=(new_user.email,)).start()
             return render(request, 'users/detail.html', {'user': new_user})
         except EmailAlreadyExists as e:
             return render(request, 'users/create.html', {'error': str(e), 'form_data': request.POST})
