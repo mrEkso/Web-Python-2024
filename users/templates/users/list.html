@@ -9,7 +9,7 @@
         {% for user in users %}
         <div class="user-card" onclick="location.href='{% url 'users:user_detail' user.id %}';">
             <div class="user-card-body">
-                <h3>{{ user.email }} (ID : {{user.id}})</h3>
+                <h6>{{ user.email }} (ID : {{user.id}})</h6>
                 <div class="user-actions">
                     <a href="{% url 'users:user_detail' user.id %}" class="btn btn-primary btn-sm">View</a>
                     <a href="{% url 'users:user_update' user.id %}" class="btn btn-secondary btn-sm">Edit</a>
