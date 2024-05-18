@@ -1,5 +1,6 @@
-/venv
-/venv
+/.venv
+/звіти
+/звіти*
 __pycache__/
 *.pyc
 *.pyo
