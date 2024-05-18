@@ -1,5 +1,7 @@
-/venv
-/venv
+/.venv
+/звіти
+/звіти*
+.env
 __pycache__/
 *.pyc
 *.pyo

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>User Details</h1>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Email: {{ user.email }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">User ID: {{ user.id }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Admin Status: {{ user.is_admin|yesno:"Yes,No" }}</h6>
+    </div>
+</div>
+{% endblock %}
