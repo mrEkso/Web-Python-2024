@@ -28,14 +28,14 @@ body, html {
     z-index: 1;
 }
 
-.user-cards {
+.custom-cards {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
 }
 
-.user-card {
+.custom-card {
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -48,16 +48,16 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.user-card:hover {
+.custom-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.user-card-body {
+.custom-card-body {
     padding: 10px;
 }
 
-.user-actions {
+.custom-actions {
     margin-top: 10px;
 }
 

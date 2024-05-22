@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Update Transaction{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Update Transaction</h1>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="account_from">From Account</label>
+            <select class="form-control" id="account_from" name="account_from">
+                {% for account in accounts %}
+                <option value="{{ account.id }}" {% if account.id == transaction.account_from.id %}selected{% endif %}>
+                    {{ account.id }} (User: {{ account.user.email }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="account_to">To Account</label>
+            <select class="form-control" id="account_to" name="account_to">
+                {% for account in accounts %}
+                <option value="{{ account.id }}" {% if account.id == transaction.account_to.id %}selected{% endif %}>
+                    {{ account.id }} (User: {{ account.user.email }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount"
+                   value="{{ form_data.amount|default:transaction.amount }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}

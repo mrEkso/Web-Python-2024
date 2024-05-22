@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Account List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Account List</h1>
+    <div class="custom-cards">
+        {% for account in accounts %}
+        <div class="custom-card" onclick="location.href='{% url 'account_detail_admin' account.id %}';">
+            <div class="custom-card-body">
+                <h6>Account ID: {{ account.id }} (User ID: {{ account.user.id }})</h6>
+                <p>Balance: {{ account.balance }}</p>
+                <div class="custom-actions">
+                    <a href="{% url 'account_detail_admin' account.id %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'account_update' account.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                    <a href="{% url 'account_delete' account.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

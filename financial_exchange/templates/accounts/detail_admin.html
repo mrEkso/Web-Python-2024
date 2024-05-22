@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Account Detail</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Account ID: {{ account.id }}</h5>
+            <p class="card-text"><strong>User:</strong> {{ account.user.email }}</p>
+            <p class="card-text"><strong>Balance:</strong> {{ account.balance }}</p>
+            <a href="{% url 'account_update' account.id %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'account_delete' account.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'list_accounts' %}" class="btn btn-primary">Back to Accounts</a>
+            <h2 class="mt-4">Transactions</h2>
+            <div class="transaction-list">
+                {% for transaction in transactions %}
+                <div class="transaction-item">
+                    <p><strong>Transaction ID:</strong> {{ transaction.id }}</p>
+                    <p><strong>From Account:</strong> {{ transaction.account_from.id }}</p>
+                    <p><strong>To Account:</strong> {{ transaction.account_to.id }}</p>
+                    <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+                    <p><strong>Date:</strong> {{ transaction.date }}</p>
+                    <a href="{% url 'transaction_detail' transaction.id %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'transaction_update' transaction.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                    <a href="{% url 'transaction_delete' transaction.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+                <hr>
+                {% empty %}
+                <p>No transactions found for this account.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

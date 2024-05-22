@@ -1,6 +1,8 @@
 /.venv
 /звіти
 /звіти*
+/courses
+/courses*
 .env
 __pycache__/
 *.pyc

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>User List</h1>
+    <div class="custom-cards">
+        {% for user in users %}
+        <div class="custom-card" onclick="location.href='{% url 'user_detail' user.id %}';">
+            <div class="custom-card-body">
+                <h6>{{ user.email }} (ID : {{user.id}})</h6>
+                <div class="custom-actions">
+                    <a href="{% url 'user_detail' user.id %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'user_update' user.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                    <a href="{% url 'user_delete' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

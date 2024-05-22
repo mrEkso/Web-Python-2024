@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Transaction Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Transaction Detail</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Transaction ID: {{ transaction.id }}</h5>
+            <p class="card-text"><strong>From Account ID:</strong> {{ transaction.account_from.id }}</p>
+            <p class="card-text"><strong>From Account User:</strong> {{ transaction.account_from.user.email }}</p>
+            <p class="card-text"><strong>To Account ID:</strong> {{ transaction.account_to.id }}</p>
+            <p class="card-text"><strong>To Account User:</strong> {{ transaction.account_to.user.email }}</p>
+            <p class="card-text"><strong>Amount:</strong> {{ transaction.amount }}</p>
+            <p class="card-text"><strong>Date:</strong> {{ transaction.date }}</p>
+            <a href="{% url 'transaction_update' transaction.id %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'transaction_delete' transaction.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'list_transactions' %}" class="btn btn-primary">Back to Transactions</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

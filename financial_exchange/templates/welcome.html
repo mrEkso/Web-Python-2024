@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 card card-body">
+    <h1>Welcome to the Financial Exchange</h1>
+    {% if is_admin %}
+    <p>Welcome, admin! Here are your options:</p>
+    <ul>
+        <li><a href="{% url 'list_users' %}">Manage Users</a></li>
+        <li><a href="{% url 'list_accounts' %}">Manage Accounts</a></li>
+        <li><a href="{% url 'list_transactions' %}">Manage Transactions</a></li>
+    </ul>
+    {% else %}
+    <p>Welcome, user! Here are your options:</p>
+    <ul>
+        <li><a href="{% url 'my_accounts' %}">View My Accounts</a></li>
+        {% endif %}
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

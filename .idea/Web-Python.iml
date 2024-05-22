@@ -5,6 +5,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/звіти" />
+      <excludeFolder url="file://$MODULE_DIR$/курси/Django Application Development with SQL and Databases/5/djangoProject/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/courses" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
